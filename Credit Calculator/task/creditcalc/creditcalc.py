@@ -1,7 +1,8 @@
 import math
+import argparse
 
 
-def calculate_count_of_periods():
+def calculate_periods_annuity():
     global periods_count
     periods_count = math.ceil(math.log(
         (monthly_payment / (monthly_payment - nominal_interest_rate * principal)),
@@ -9,7 +10,7 @@ def calculate_count_of_periods():
     ))
 
 
-def calculate_monthly_payment():
+def calculate_annuity_payment():
     global monthly_payment
     monthly_payment = math.ceil(principal * nominal_interest_rate * math.pow(1 + nominal_interest_rate, periods_count)
                                 / (math.pow(1 + nominal_interest_rate, periods_count) - 1))
@@ -43,26 +44,35 @@ def display_credit_principal():
     print("Your credit principal = {0}".format(math.floor(principal)))
 
 
-action = input("What do you want to calculate?\n" +
-               'type "n" - for count of months,\n' +
-               'type "a" - for annuity monthly payment,\n' +
-               'type "p" - for credit principal:')
+def diff_payment():
+    return
 
-if action != 'p':
-    principal = principal = float(input("Enter credit principal"))
-if action != 'a':
-    monthly_payment = float(input("Enter monthly payment:"))
-if action != 'n':
-    periods_count = int(input("Enter count of periods:"))
-interest = float(input("Enter credit interest:"))
-nominal_interest_rate = interest / (12 * 100)
 
-if action == 'a':
-    calculate_monthly_payment()
-    display_monthly_payment()
-elif action == 'n':
-    calculate_count_of_periods()
-    display_count_of_periods()
+def annuity_payment():
+    return
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--type", help="type of payment")
+parser.add_argument("--payment", type=float)
+parser.add_argument("--principal", type=float)
+parser.add_argument("--periods", type=int)
+parser.add_argument("--interest", type=float)
+args = parser.parse_args()
+if args.type != 'diff' or args.type != 'annuity':
+    print("Incorrect parameters")
+elif args.type == 'diff' and (args.periods is None or args.principal is None):
+    print("Incorrect parameters")
+elif args.interest is None:
+    print("Incorrect parameters")
+elif args.type == 'diff':
+    diff_payment()
 else:
-    calculate_credit_principal()
-    display_credit_principal()
+    annuity_payment()
+
+
+#principal
+#monthly_payment
+#periods_count
+#interest
+#nominal_interest_rate = interest / (12 * 100)
